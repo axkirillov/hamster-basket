@@ -8,7 +8,7 @@
 				<img src="/basket.png">
 			</a>
 		</div>
-		<h1 class="mb-6 font-semibold text-6xl">Hamster's Basket 2.0</h1>
+		<h1 class="m-4 font-semibold text-2xl text-center">Hamster's Basket 2.0</h1>
 		<div class="bg-white shadow overflow-hidden rounded-md">
 			<ul v-for="(todo, index) in allTodos" :key="index">
 				<Todo :todo="todo" />
