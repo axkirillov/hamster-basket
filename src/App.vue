@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Auth from '@/components/Auth.vue'
 import PasswordReset from '@/components/PasswordReset.vue'
 import TodoList from '@/components/TodoList.vue'
