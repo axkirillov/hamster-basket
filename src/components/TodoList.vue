@@ -8,18 +8,17 @@
 				<img src="/basket.png">
 			</a>
 		</div>
-		<h1 class="mb-6 font-bold text-6xl">Hamster's Basket 2.0</h1>
-		<div class="flex gap-2 my-2">
-			<input v-model="task" class="rounded w-full p-2" type="text" placeholder="What do you need to?" />
-			<button @click="insertTask" class="btn-black">
-				Add
-			</button>
-		</div>
-
+		<h1 class="mb-6 font-semibold text-6xl">Hamster's Basket 2.0</h1>
 		<div class="bg-white shadow overflow-hidden rounded-md">
 			<ul v-for="(todo, index) in allTodos" :key="index">
 				<Todo :todo="todo" />
 			</ul>
+		</div>
+		<div class="flex gap-2 my-4">
+			<input v-model="task" class="rounded w-full p-2" type="text" placeholder="What do you need to?" />
+			<button @click="insertTask" class="btn-black">
+				Add
+			</button>
 		</div>
 	</div>
 </template>
