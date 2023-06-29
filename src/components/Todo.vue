@@ -1,55 +1,47 @@
 <template>
-  <li
-    class="w-full block cursor-pointer hover:bg-gray-200 focus:outline-none focus:bg-gray-200 transition duration-150 ease-in-out"
-  >
-    <div class="flex items-center px-4 py-4 sm:px-6">
-      <div class="min-w-0 flex-1 flex items-center">
-        <div class="text-sm leading-5 font-medium truncate">{{ todo.task }}</div>
-      </div>
-      <div>
-        <input
-          @click="updateTaskCompletion(todo, !todo['is_complete'])"
-          class="cursor-pointer"
-          type="checkbox"
-          :checked="todo['is_complete']"
-        />
-      </div>
-      <button @click="clearTodo" class="w-4 h-4 ml-2 border-2 hover:border-black rounded">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="gray" aria-label="delete">
-          <path
-            fillRule="evenodd"
-            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </button>
-    </div>
-  </li>
+	<li
+		class="w-full block cursor-pointer hover:bg-gray-200 focus:outline-none focus:bg-gray-200 transition duration-150 ease-in-out">
+		<div class="flex items-center px-0 py-4 sm:px-4">
+			<Checkbox :checked="todo['is_complete'] ?? false" @click="updateTaskCompletion(todo, !todo['is_complete'])" />
+			<div class="min-w-0 flex-1 flex items-center">
+				<div class="text-sm leading-5 font-medium truncate">{{ todo.task }}</div>
+			</div>
+			<button
+				class="middle none center mr-4 flex items-center justify-center rounded-lg bg-gray-100 p-2 font-sans text-xs font-bold uppercase text-pink-500 shadow-md shadow-gray-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+				data-ripple-light="true" @click="clearTodo">
+				<font-awesome-icon :icon="['fas', 'xmark']" />
+			</button>
+		</div>
+	</li>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue'
 import { updateTaskCompletion, deleteTodo } from '@/vuetils/useTodo'
 import { allTodos } from '@/vuetils/useTodo'
+import Checkbox from '@/components/Checkbox.vue'
 
 export default defineComponent({
-  name: 'Todo',
-  props: {
-    todo: {
-      type: Object as PropType<Todo>,
-      required: true,
-    },
-  },
-  setup(props) {
-    // Removes todo from supbase and also from app state
-    function clearTodo() {
-      deleteTodo(props.todo).then(() => {
-        allTodos.value = allTodos.value.filter(todo => todo.id != props.todo.id)
-      })
-    }
+	name: 'Todo',
+	components: {
+		Checkbox,
+	},
+	props: {
+		todo: {
+			type: Object as PropType<Todo>,
+			required: true,
+		},
+	},
+	setup(props) {
+		// Removes todo from supbase and also from app state
+		function clearTodo() {
+			deleteTodo(props.todo).then(() => {
+				allTodos.value = allTodos.value.filter(todo => todo.id != props.todo.id)
+			})
+		}
 
-    return { updateTaskCompletion, clearTodo }
-  },
+		return { updateTaskCompletion, clearTodo }
+	},
 })
 </script>
 
