@@ -21,7 +21,7 @@ async function handleLogin(credentials: Credentials) {
     if (!error && !data.user) {
       alert('Check your email for the login link!')
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error thrown:', error.message)
     alert(error.error_description || error)
   }
@@ -86,7 +86,7 @@ async function handleUpdateUser(credentials: Credentials) {
       alert('Successfully updated user info!')
       window.location.href = '/'
     }
-  } catch (error) {
+  } catch (error: any) {
     alert('Error updating user info: ' + error.message)
   }
 }
