@@ -33,7 +33,7 @@ async function fetchTodos() {
  */
 async function addTodo(todo: Todo): Promise<null | Todo> {
 	try {
-		const { data, error } = await supabase.from('todos').insert(todo).single()
+		const { error } = await supabase.from('todos').insert(todo).single()
 
 		if (error) {
 			alert(error.message)
@@ -41,10 +41,8 @@ async function addTodo(todo: Todo): Promise<null | Todo> {
 			return null
 		}
 
-		console.log('created a new todo')
-		return data
+		return todo
 	} catch (err) {
-		alert('Error')
 		console.error('Unknown problem inserting to db', err)
 		return null
 	}
