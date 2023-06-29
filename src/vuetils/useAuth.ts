@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { supabase } from '@/lib/supabase'
-import { Session, Provider } from '@supabase/gotrue-js/dist/main/lib/types'
+import { type Session, type Provider } from '@supabase/gotrue-js/dist/main/lib/types'
 
 const userSession = ref<Session | null>(null)
 
