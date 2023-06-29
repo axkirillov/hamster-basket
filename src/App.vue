@@ -17,9 +17,6 @@
         <template #default>
           <div>
             <TodoList />
-            <button class="btn-black w-full mt-12" @click="handleLogout">
-              Logout
-            </button>
           </div>
         </template>
         <template #fallback>
