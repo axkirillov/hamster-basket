@@ -1,6 +1,14 @@
 <template>
 	<div class="w-full">
-		<h1 class="mb-12 font-bold text-6xl">Todo List.</h1>
+		<div class="logos">
+			<a href="" class="logo">
+				<img src="/hamster.svg">
+			</a>
+			<a href="" class="logo">
+				<img src="/basket.png">
+			</a>
+		</div>
+		<h1 class="mb-6 font-bold text-6xl">Hamster's Basket 2.0</h1>
 		<div class="flex gap-2 my-2">
 			<input v-model="task" class="rounded w-full p-2" type="text" placeholder="What do you need to?" />
 			<button @click="insertTask" class="btn-black">

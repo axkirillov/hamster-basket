@@ -3,6 +3,7 @@ import App from './App.vue'
 import { supabase } from './lib/supabase'
 import { userSession } from '@/vuetils/useAuth'
 import './assets/tailwind.css'
+import './assets/main.css'
 
 createApp(App).mount('#app')
 
