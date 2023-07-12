@@ -1,7 +1,7 @@
 <template>
 	<li
 		class="w-full block cursor-pointer hover:bg-gray-200 focus:outline-none focus:bg-gray-200 transition duration-150 ease-in-out">
-		<div class="flex items-center px-0 py-4 sm:px-4">
+		<div class="flex items-center px-0 py-0 sm:px-4">
 			<Checkbox :checked="todo['is_complete'] ?? false" @click="updateTaskCompletion(todo, !todo['is_complete'])" />
 			<div class="min-w-0 flex-1 flex items-center">
 				<div class="text-sm leading-5 font-medium truncate">{{ todo.task }}</div>
