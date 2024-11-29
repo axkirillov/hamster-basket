@@ -76,13 +76,15 @@
 					:style="{ scrollBehavior: 'smooth' }"
 				>
 					<nav 
+						ref="tabNavContainer"
 						class="-mb-px flex space-x-2 w-max" 
 						aria-label="Tabs"
 						:style="{ transform: `translateX(-${tabScrollPosition}px)` }"
 					>
 						<button 
-							v-for="list in allLists" 
+							v-for="list in visibleLists" 
 							:key="list.id"
+							:data-list-id="list.id"
 							@click="selectList(list)"
 							:class="{
 								'border-blue-500 text-blue-600': currentList?.id === list.id,
@@ -294,6 +296,30 @@ export default defineComponent({
 		const showListSelection = ref(false)
 		const tabContainer = ref<HTMLDivElement | null>(null)
 		const tabScrollPosition = ref(0)
+		const tabNavContainer = ref<HTMLDivElement | null>(null)
+		const visibleLists = computed(() => {
+			if (!tabContainer.value || !tabNavContainer.value) return allLists.value
+
+			const containerWidth = tabContainer.value.clientWidth
+			let totalWidth = 0
+			const visibleListsArray = []
+
+			for (const list of allLists.value) {
+				const listButton = tabNavContainer.value.querySelector(`button[data-list-id="${list.id}"]`) as HTMLButtonElement
+				if (listButton) {
+					const buttonWidth = listButton.offsetWidth
+					if (totalWidth + buttonWidth <= containerWidth) {
+						visibleListsArray.push(list)
+						totalWidth += buttonWidth
+					} else {
+						break
+					}
+				}
+			}
+
+			return visibleListsArray
+		})
+
 		const isMaxScrollReached = computed(() => {
 			if (!tabContainer.value) return true
 			return tabScrollPosition.value >= tabContainer.value.scrollWidth - tabContainer.value.clientWidth
@@ -373,9 +399,11 @@ export default defineComponent({
 			showListSelection,
 			toggleListSelection,
 			tabContainer,
+			tabNavContainer,
 			tabScrollPosition,
 			scrollTabs,
 			isMaxScrollReached,
+			visibleLists,
 		}
 	},
 })
