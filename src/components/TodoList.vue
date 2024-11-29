@@ -12,15 +12,6 @@
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
 		<nav v-if="allLists.length > 0" class="flex items-center justify-center space-x-2 text-sm text-gray-600 mb-2">
-			<button 
-				@click="toggleSideMenu" 
-				class="mr-2 p-1 hover:bg-gray-200 rounded-full transition duration-200"
-			>
-				<font-awesome-icon 
-					:icon="['fas', 'bars']" 
-					class="w-5 h-5 text-gray-600"
-				/>
-			</button>
 			<div class="relative">
 				<button 
 					@click="toggleListDropdown" 
@@ -156,59 +147,6 @@
 				</div>
 			</div>
 		</nav>
-		<div class="border-b border-gray-200 mb-4 max-w-full flex items-center">
-			<div class="flex items-center w-full">
-				<button 
-					@click="scrollTabs('left')" 
-					class="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-					:disabled="tabScrollPosition === 0"
-				>
-					<font-awesome-icon :icon="['fas', 'chevron-left']" class="w-5 h-5" />
-				</button>
-				<div 
-					ref="tabContainer" 
-					class="overflow-x-auto flex-grow scroll-smooth"
-					:style="{ scrollBehavior: 'smooth' }"
-				>
-					<nav 
-						ref="tabNavContainer"
-						class="-mb-px flex space-x-2 w-max" 
-						aria-label="Tabs"
-						:style="{ transform: `translateX(-${tabScrollPosition}px)` }"
-					>
-						<button 
-							v-for="list in visibleLists" 
-							:key="list.id"
-							:data-list-id="list.id"
-							@click="selectList(list)"
-							:class="{
-								'border-blue-500 text-blue-600': currentList?.id === list.id,
-								'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': currentList?.id !== list.id
-							}"
-							class="
-								whitespace-nowrap 
-								border-b-2 
-								px-4 
-								py-2 
-								text-sm 
-								font-medium
-								flex-shrink-0
-							"
-						>
-							{{ list.name }}
-						</button>
-					</nav>
-				</div>
-				<button 
-					@click="scrollTabs('right')" 
-					class="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-					:disabled="isMaxScrollReached"
-				>
-					<font-awesome-icon :icon="['fas', 'chevron-right']" class="w-5 h-5" />
-				</button>
-			</div>
-		</div>
-
 
 		<!-- List Selection Overlay -->
 		<div 
@@ -398,7 +336,6 @@ export default defineComponent({
 			if (!tabContainer.value || !tabNavContainer.value) return allLists.value
 
 			const containerWidth = tabContainer.value.clientWidth
-			let totalWidth = 0
 			const visibleListsArray = []
 
 			// If no lists, return empty array
