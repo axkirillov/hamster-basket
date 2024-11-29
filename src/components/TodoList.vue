@@ -21,9 +21,80 @@
 					class="w-5 h-5 text-gray-600"
 				/>
 			</button>
-			<span>Lists</span>
-			<font-awesome-icon :icon="['fas', 'chevron-right']" class="w-3 h-3" />
-			<span class="font-semibold">{{ currentList?.name }}</span>
+			<div class="relative">
+				<button 
+					@click="toggleListDropdown" 
+					class="flex items-center space-x-1 hover:bg-gray-100 rounded-md px-2 py-1 transition duration-200"
+				>
+					<span>Lists</span>
+					<font-awesome-icon :icon="['fas', 'chevron-right']" class="w-3 h-3" />
+					<span class="font-semibold">{{ currentList?.name }}</span>
+					<font-awesome-icon 
+						:icon="['fas', 'caret-down']" 
+						class="w-3 h-3 ml-1 text-gray-500" 
+					/>
+				</button>
+				
+				<!-- List Dropdown -->
+				<div 
+					v-if="listDropdownOpen" 
+					class="absolute left-0 mt-2 w-56 origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+				>
+					<div class="py-1">
+						<button 
+							v-for="list in allLists" 
+							:key="list.id"
+							@click="selectList(list); listDropdownOpen = false"
+							:class="{
+								'bg-blue-500 text-white': currentList?.id === list.id,
+								'hover:bg-gray-100': currentList?.id !== list.id
+							}"
+							class="
+								text-left 
+								w-full 
+								px-4 
+								py-2 
+								text-sm 
+								transition 
+								duration-200 
+								flex 
+								items-center 
+								justify-between
+							"
+						>
+							<span>{{ list.name }}</span>
+							<font-awesome-icon 
+								v-if="currentList?.id === list.id" 
+								:icon="['fas', 'check']" 
+								class="w-4 h-4" 
+							/>
+						</button>
+						<div class="border-t border-gray-200 py-1">
+							<button 
+								@click="createListPrompt(); listDropdownOpen = false" 
+								class="
+									text-gray-900 
+									group 
+									flex 
+									rounded-md 
+									items-center 
+									w-full 
+									px-4 
+									py-2 
+									text-sm 
+									hover:bg-gray-100
+								"
+							>
+								<font-awesome-icon 
+									:icon="['fas', 'plus']" 
+									class="mr-2 h-5 w-5 text-gray-500"
+								/>
+								Create New List
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<button 
 				v-if="currentList && currentList.name !== 'Default List'"
 				@click="deleteCurrentList" 
@@ -320,6 +391,7 @@ export default defineComponent({
 
 		const sideMenuOpen = ref(false)
 		const showListSelection = ref(false)
+		const listDropdownOpen = ref(false)
 		const tabContainer = ref<HTMLDivElement | null>(null)
 		const tabScrollPosition = ref(0)
 		const tabNavContainer = ref<HTMLDivElement | null>(null)
@@ -372,14 +444,23 @@ export default defineComponent({
 			sideMenuOpen.value = false
 		}
 
-		// Click outside handler for side menu
+		function toggleListDropdown() {
+			listDropdownOpen.value = !listDropdownOpen.value
+		}
+
+		// Click outside handler for side menu and list dropdown
 		onMounted(() => {
 			const handleClickOutside = (event: MouseEvent) => {
 				const menuButton = event.target as HTMLElement
-				const menu = document.querySelector('.absolute.left-0.mt-2')
+				const sideMenu = document.querySelector('.absolute.left-0.mt-2')
+				const listDropdown = document.querySelector('.absolute.left-0.mt-2 + div')
 				
-				if (menu && !menu.contains(menuButton) && !menuButton.closest('button')) {
+				if (sideMenu && !sideMenu.contains(menuButton) && !menuButton.closest('button')) {
 					sideMenuOpen.value = false
+				}
+
+				if (listDropdown && !listDropdown.contains(menuButton) && !menuButton.closest('button[data-list-dropdown]')) {
+					listDropdownOpen.value = false
 				}
 			}
 
@@ -430,6 +511,8 @@ export default defineComponent({
 			scrollTabs,
 			isMaxScrollReached,
 			visibleLists,
+			listDropdownOpen,
+			toggleListDropdown,
 		}
 	},
 })
