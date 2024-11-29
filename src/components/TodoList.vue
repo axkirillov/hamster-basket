@@ -61,29 +61,29 @@
 			</div>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
-		<div class="flex space-x-2 mb-4">
-			<div class="flex overflow-x-auto">
-				<div v-for="list in allLists" :key="list.id" class="group relative flex items-center">
-					<button 
-						@click="selectList(list)"
-						:class="{
-							'bg-blue-500 text-white': currentList?.id === list.id,
-							'bg-gray-200': currentList?.id !== list.id
-						}"
-						class="
-							px-4 
-							py-2 
-							rounded-md 
-							mr-2 
-							whitespace-nowrap 
-							flex-grow 
-							relative
-						"
-					>
-						{{ list.name }}
-					</button>
-				</div>
-			</div>
+		<div class="border-b border-gray-200 mb-4">
+			<nav class="-mb-px flex space-x-2 overflow-x-auto" aria-label="Tabs">
+				<button 
+					v-for="list in allLists" 
+					:key="list.id"
+					@click="selectList(list)"
+					:class="{
+						'border-blue-500 text-blue-600': currentList?.id === list.id,
+						'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': currentList?.id !== list.id
+					}"
+					class="
+						whitespace-nowrap 
+						border-b-2 
+						px-4 
+						py-2 
+						text-sm 
+						font-medium
+						flex-shrink-0
+					"
+				>
+					{{ list.name }}
+				</button>
+			</nav>
 		</div>
 
 
