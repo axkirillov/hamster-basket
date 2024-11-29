@@ -121,8 +121,8 @@ export default defineComponent({
 		})
 
 		async function createList() {
-			if (listName.value.length <= 2) {
-				alert('Please provide a meaningful list name')
+			if (!listName.value.trim()) {
+				alert('Please provide a list name')
 				return
 			}
 
@@ -153,8 +153,8 @@ export default defineComponent({
 		 */
 		async function insertTask() {
 			// Guard for short task descriptions which will fail db policy.
-			if (task.value.length <= 3) {
-				alert('Please make your task a little more descriptive')
+			if (!task.value.trim()) {
+				alert('Please enter a task')
 				return
 			}
 			// Type check to ensure user is still logged in.
