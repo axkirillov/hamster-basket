@@ -1,12 +1,23 @@
 <template>
 	<div class="w-full">
-		<div class="logos">
-			<a href="" class="logo">
-				<img src="/hamster.svg">
-			</a>
-			<a href="" class="logo">
-				<img src="/basket.png">
-			</a>
+		<div class="flex items-center justify-between mb-4">
+			<button 
+				@click="toggleSideMenu" 
+				class="ml-4 p-2 hover:bg-gray-200 rounded-full transition duration-200"
+			>
+				<font-awesome-icon 
+					:icon="['fas', 'bars']" 
+					class="w-6 h-6 text-gray-600"
+				/>
+			</button>
+			<div class="logos flex-grow flex justify-center">
+				<a href="" class="logo mr-2">
+					<img src="/hamster.svg">
+				</a>
+				<a href="" class="logo">
+					<img src="/basket.png">
+				</a>
+			</div>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
 		<div class="flex space-x-2 mb-4">
@@ -236,6 +247,12 @@ export default defineComponent({
 			}
 		}
 
+		const sideMenuOpen = ref(false)
+
+		function toggleSideMenu() {
+			sideMenuOpen.value = !sideMenuOpen.value
+		}
+
 		return {
 			task,
 			listName,
@@ -249,6 +266,8 @@ export default defineComponent({
 			selectList,
 			confirmDeleteList,
 			userSession,
+			sideMenuOpen,
+			toggleSideMenu,
 		}
 	},
 })
