@@ -164,7 +164,11 @@ export default defineComponent({
 			}
 			try {
 				// Try and write the data to the database.
-				const todo = await addTodo({ user_id: userSession.value.user.id, task: task.value })
+				const todo = await addTodo({ 
+				  user_id: userSession.value.user.id, 
+				  task: task.value, 
+				  list_id: currentList.value?.id 
+				})
 
 				// If there was no response, don't do anything.
 				if (!todo) {
