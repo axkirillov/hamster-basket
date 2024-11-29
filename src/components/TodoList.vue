@@ -16,9 +16,7 @@
 						@click="selectList(list)"
 						:class="{
 							'bg-blue-500 text-white': currentList?.id === list.id,
-							'bg-gray-200': currentList?.id !== list.id
-						}"
-						:class="{
+							'bg-gray-200': currentList?.id !== list.id,
 							'pr-10': list.name !== 'Default List'
 						}"
 						class="
