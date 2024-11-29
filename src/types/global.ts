@@ -10,4 +10,12 @@ declare interface Todo {
   task: string
   is_complete?: boolean
   inserted_at?: string
+  list_id?: number
+}
+
+declare interface TodoList {
+  id?: number
+  user_id: string
+  name: string
+  created_at?: string
 }

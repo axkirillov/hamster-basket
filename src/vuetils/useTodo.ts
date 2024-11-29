@@ -3,13 +3,43 @@ import { supabase } from '@/lib/supabase'
 import { ref } from 'vue'
 
 const allTodos = ref<Todo[]>([])
+const allLists = ref<TodoList[]>([])
+const currentList = ref<TodoList | null>(null)
 
 /**
- * Retrieve all todo for the signed in user
+ * Retrieve all lists for the signed in user
  */
-async function fetchTodos() {
+async function fetchLists() {
 	try {
-		const { data: todos, error } = await supabase.from('todos').select('*').order('id')
+		const { data: lists, error } = await supabase.from('todo_lists').select('*').order('id')
+
+		if (error) {
+			console.log('error', error)
+			return
+		}
+		// handle for when no lists are returned
+		if (lists === null) {
+			allLists.value = []
+			return
+		}
+		// store response to allLists
+		allLists.value = lists
+		console.log('got lists!', allLists.value)
+	} catch (err) {
+		console.error('Error retrieving lists from db', err)
+	}
+}
+
+/**
+ * Retrieve todos for the current list
+ */
+async function fetchTodos(listId?: number) {
+	try {
+		const query = listId 
+			? supabase.from('todos').select('*').eq('list_id', listId).order('id')
+			: supabase.from('todos').select('*').order('id')
+
+		const { data: todos, error } = await query
 
 		if (error) {
 			console.log('error', error)
@@ -29,11 +59,31 @@ async function fetchTodos() {
 }
 
 /**
+ *  Add a new list to supabase
+ */
+async function addList(list: TodoList): Promise<null | TodoList> {
+	try {
+		const { data, error } = await supabase.from('todo_lists').insert(list).select().single()
+
+		if (error) {
+			alert(error.message)
+			console.error('There was an error inserting list', error)
+			return null
+		}
+
+		return data
+	} catch (err) {
+		console.error('Unknown problem inserting list to db', err)
+		return null
+	}
+}
+
+/**
  *  Add a new todo to supabase
  */
 async function addTodo(todo: Todo): Promise<null | Todo> {
 	try {
-		const { error } = await supabase.from('todos').insert(todo).single()
+		const { data, error } = await supabase.from('todos').insert(todo).select().single()
 
 		if (error) {
 			alert(error.message)
@@ -41,7 +91,7 @@ async function addTodo(todo: Todo): Promise<null | Todo> {
 			return null
 		}
 
-		return todo
+		return data
 	} catch (err) {
 		console.error('Unknown problem inserting to db', err)
 		return null
