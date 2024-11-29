@@ -47,7 +47,7 @@
 
 		<div class="bg-white shadow overflow-hidden rounded-md py-2">
 			<ul v-if="currentList">
-				<Todo v-for="(todo, index) in allTodos" :key="index" :todo="todo" />
+				<Todo v-for="(todo, index) in filteredTodos" :key="index" :todo="todo" />
 			</ul>
 			<p v-else class="text-center text-gray-500">
 				Create a list to get started!
