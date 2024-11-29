@@ -91,6 +91,28 @@
 								/>
 								Create New List
 							</button>
+							<button 
+								v-if="currentList && currentList.name !== 'Default List'"
+								@click="deleteCurrentList(); listDropdownOpen = false"
+								class="
+									text-red-600 
+									group 
+									flex 
+									rounded-md 
+									items-center 
+									w-full 
+									px-4 
+									py-2 
+									text-sm 
+									hover:bg-gray-100
+								"
+							>
+								<font-awesome-icon 
+									:icon="['fas', 'trash']" 
+									class="mr-2 h-5 w-5 text-red-500"
+								/>
+								Delete Current List
+							</button>
 						</div>
 					</div>
 				</div>
