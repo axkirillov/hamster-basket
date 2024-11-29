@@ -113,26 +113,8 @@
 					</button>
 				</div>
 			</div>
-			<button 
-				@click="showListInput = !showListInput" 
-				class="bg-green-500 text-white px-4 py-2 rounded-md"
-			>
-				+ List
-			</button>
 		</div>
 
-		<div v-if="showListInput" class="mb-4 flex">
-			<input
-				v-model="listName"
-				class="rounded w-full p-2 mr-2"
-				type="text"
-				placeholder="New list name"
-				@keyup.enter="createList"
-			/>
-			<button @click="createList" class="btn-black">
-				Create
-			</button>
-		</div>
 
 		<!-- List Selection Overlay -->
 		<div 
@@ -219,7 +201,6 @@ export default defineComponent({
 	async setup() {
 		const task = ref('')
 		const listName = ref('')
-		const showListInput = ref(false)
 
 		onMounted(async () => {
 			await fetchLists()
@@ -252,7 +233,6 @@ export default defineComponent({
 
 			if (newList) {
 				listName.value = ''
-				showListInput.value = false
 				await fetchLists()
 			}
 		}
@@ -354,7 +334,6 @@ export default defineComponent({
 		return {
 			task,
 			listName,
-			showListInput,
 			allTodos,
 			filteredTodos,
 			allLists,
