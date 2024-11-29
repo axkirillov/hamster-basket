@@ -61,6 +61,9 @@
 			</div>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
+		<p v-if="currentList" class="text-center text-gray-600 mb-2">
+			Current list: {{ currentList.name }}
+		</p>
 		<div class="border-b border-gray-200 mb-4 max-w-full flex items-center">
 			<div class="flex items-center w-full">
 				<button 
