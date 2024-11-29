@@ -298,23 +298,23 @@ export default defineComponent({
 		const tabScrollPosition = ref(0)
 		const tabNavContainer = ref<HTMLDivElement | null>(null)
 		const visibleLists = computed(() => {
+			// If refs are not ready, return all lists
 			if (!tabContainer.value || !tabNavContainer.value) return allLists.value
 
 			const containerWidth = tabContainer.value.clientWidth
 			let totalWidth = 0
 			const visibleListsArray = []
 
+			// If no lists, return empty array
+			if (allLists.value.length === 0) return []
+
+			// Fallback to all lists if container width is very small
+			if (containerWidth < 100) return allLists.value
+
 			for (const list of allLists.value) {
-				const listButton = tabNavContainer.value.querySelector(`button[data-list-id="${list.id}"]`) as HTMLButtonElement
-				if (listButton) {
-					const buttonWidth = listButton.offsetWidth
-					if (totalWidth + buttonWidth <= containerWidth) {
-						visibleListsArray.push(list)
-						totalWidth += buttonWidth
-					} else {
-						break
-					}
-				}
+				visibleListsArray.push(list)
+				// Optional: Add a break condition if needed
+				if (visibleListsArray.length >= 5) break
 			}
 
 			return visibleListsArray
