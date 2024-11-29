@@ -18,6 +18,9 @@
 							'bg-blue-500 text-white': currentList?.id === list.id,
 							'bg-gray-200': currentList?.id !== list.id
 						}"
+						:class="{
+							'pr-10': list.name !== 'Default List'
+						}"
 						class="
 							px-4 
 							py-2 
@@ -26,7 +29,6 @@
 							whitespace-nowrap 
 							flex-grow 
 							relative
-							pr-10
 						"
 					>
 						{{ list.name }}
