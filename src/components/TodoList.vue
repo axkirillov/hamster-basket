@@ -26,6 +26,7 @@
 							whitespace-nowrap 
 							flex-grow 
 							relative
+							pr-10
 						"
 					>
 						{{ list.name }}
