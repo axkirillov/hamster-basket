@@ -68,8 +68,7 @@
 						@click="selectList(list)"
 						:class="{
 							'bg-blue-500 text-white': currentList?.id === list.id,
-							'bg-gray-200': currentList?.id !== list.id,
-							'pr-8': list.name !== 'Default List'
+							'bg-gray-200': currentList?.id !== list.id
 						}"
 						class="
 							px-4 
@@ -82,34 +81,6 @@
 						"
 					>
 						{{ list.name }}
-						<button 
-							v-if="list.name !== 'Default List'"
-							@click.stop="confirmDeleteList(list)"
-							class="
-								absolute 
-								right-1 
-								top-1/2 
-								-translate-y-1/2 
-								text-red-600 
-								hover:bg-red-100 
-								p-1 
-								rounded-full 
-								transition 
-								duration-200 
-								ease-in-out 
-								opacity-0 
-								group-hover:opacity-100 
-								focus:outline-none 
-								focus:ring-2 
-								focus:ring-red-300
-							"
-							title="Delete List"
-						>
-							<font-awesome-icon 
-								:icon="['fas', 'xmark']" 
-								class="w-4 h-4"
-							/>
-						</button>
 					</button>
 				</div>
 			</div>
