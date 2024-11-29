@@ -14,7 +14,7 @@
 		<div class="flex items-center px-0 py-0 sm:px-4">
 			<Checkbox :checked="todo['is_complete'] ?? false" @click="updateTaskCompletion(todo, !todo['is_complete'])" />
 			<div class="min-w-0 flex-1 flex items-center">
-				<div class="text-sm leading-5 font-medium whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">{{ todo.task }}</div>
+				<div class="text-sm leading-5 font-medium whitespace-pre-wrap break-words w-full">{{ todo.task }}</div>
 			</div>
 			<button
 				class="
