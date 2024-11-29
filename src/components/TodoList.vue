@@ -54,7 +54,7 @@
 							title="Delete List"
 						>
 							<font-awesome-icon 
-								:icon="['fas', 'trash']" 
+								:icon="['fas', 'xmark']" 
 								class="w-4 h-4"
 							/>
 						</button>
