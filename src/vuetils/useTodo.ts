@@ -145,4 +145,14 @@ channel
 	.subscribe()
 
 
-export { allTodos, fetchTodos, addTodo, updateTaskCompletion, deleteTodo }
+export { 
+  allTodos, 
+  fetchTodos, 
+  addTodo, 
+  updateTaskCompletion, 
+  deleteTodo, 
+  currentList, 
+  allLists, 
+  fetchLists, 
+  addList 
+}
