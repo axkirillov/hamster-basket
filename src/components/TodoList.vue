@@ -95,30 +95,6 @@
 					</div>
 				</div>
 			</div>
-			<button 
-				v-if="currentList && currentList.name !== 'Default List'"
-				@click="deleteCurrentList" 
-				class="
-					ml-2 
-					text-red-500 
-					hover:text-red-700 
-					hover:bg-red-100 
-					p-1.5 
-					rounded-full 
-					transition-all 
-					duration-300 
-					ease-in-out 
-					transform 
-					hover:scale-110 
-					active:scale-95
-				"
-			>
-				<font-awesome-icon 
-					:icon="['fas', 'trash']" 
-					class="w-4 h-4 hover:animate-wiggle" 
-				/>
-			</button>
-			
 			<!-- Flyout Menu -->
 			<div 
 				v-if="sideMenuOpen" 
