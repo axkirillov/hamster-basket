@@ -61,9 +61,11 @@
 			</div>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
-		<p v-if="currentList" class="text-center text-gray-600 mb-2">
-			{{ currentList.name }}
-		</p>
+		<nav v-if="allLists.length > 0" class="flex items-center justify-center space-x-2 text-sm text-gray-600 mb-2">
+			<span>Lists</span>
+			<font-awesome-icon :icon="['fas', 'chevron-right']" class="w-3 h-3" />
+			<span class="font-semibold">{{ currentList?.name }}</span>
+		</nav>
 		<div class="border-b border-gray-200 mb-4 max-w-full flex items-center">
 			<div class="flex items-center w-full">
 				<button 
