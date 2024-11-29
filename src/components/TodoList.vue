@@ -9,10 +9,49 @@
 			</a>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
+		<div class="flex space-x-2 mb-4">
+			<div class="flex overflow-x-auto">
+				<button 
+					v-for="list in allLists" 
+					:key="list.id"
+					@click="selectList(list)"
+					:class="{
+						'bg-blue-500 text-white': currentList?.id === list.id,
+						'bg-gray-200': currentList?.id !== list.id
+					}"
+					class="px-4 py-2 rounded-md mr-2 whitespace-nowrap"
+				>
+					{{ list.name }}
+				</button>
+			</div>
+			<button 
+				@click="showListInput = !showListInput" 
+				class="bg-green-500 text-white px-4 py-2 rounded-md"
+			>
+				+ List
+			</button>
+		</div>
+
+		<div v-if="showListInput" class="mb-4 flex">
+			<input
+				v-model="listName"
+				class="rounded w-full p-2 mr-2"
+				type="text"
+				placeholder="New list name"
+				@keyup.enter="createList"
+			/>
+			<button @click="createList" class="btn-black">
+				Create
+			</button>
+		</div>
+
 		<div class="bg-white shadow overflow-hidden rounded-md py-2">
-			<ul v-for="(todo, index) in allTodos" :key="index">
-				<Todo :todo="todo" />
+			<ul v-if="currentList">
+				<Todo v-for="(todo, index) in allTodos" :key="index" :todo="todo" />
 			</ul>
+			<p v-else class="text-center text-gray-500">
+				Create a list to get started!
+			</p>
 		</div>
 		<div class="flex gap-2 my-4">
 			<input
@@ -38,9 +77,9 @@
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/camelcase */
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import Todo from '@/components/Todo.vue'
-import { allTodos, fetchTodos, addTodo } from '@/vuetils/useTodo'
+import { allTodos, allLists, fetchTodos, fetchLists, addTodo, addList, currentList } from '@/vuetils/useTodo'
 import { userSession } from '@/vuetils/useAuth'
 
 export default defineComponent({
@@ -50,9 +89,45 @@ export default defineComponent({
 	},
 
 	async setup() {
-		await fetchTodos()
-
 		const task = ref('')
+		const listName = ref('')
+		const showListInput = ref(false)
+
+		onMounted(async () => {
+			await fetchLists()
+			if (allLists.value.length > 0) {
+				currentList.value = allLists.value[0]
+				await fetchTodos(currentList.value.id)
+			}
+		})
+
+		async function createList() {
+			if (listName.value.length <= 2) {
+				alert('Please provide a meaningful list name')
+				return
+			}
+
+			if (userSession?.value === null) {
+				alert('Please log in again')
+				return
+			}
+
+			const newList = await addList({ 
+				user_id: userSession.value.user.id, 
+				name: listName.value 
+			})
+
+			if (newList) {
+				listName.value = ''
+				showListInput.value = false
+				await fetchLists()
+			}
+		}
+
+		function selectList(list: TodoList) {
+			currentList.value = list
+			fetchTodos(list.id)
+		}
 
 		/**
 		 * Wrapper function adding a new todo for additional client-side error handling.
@@ -88,8 +163,14 @@ export default defineComponent({
 
 		return {
 			task,
+			listName,
+			showListInput,
 			allTodos,
+			allLists,
+			currentList,
 			insertTask,
+			createList,
+			selectList,
 			userSession,
 		}
 	},
