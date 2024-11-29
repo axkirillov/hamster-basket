@@ -11,18 +11,25 @@
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
 		<div class="flex space-x-2 mb-4">
 			<div class="flex overflow-x-auto">
-				<button 
-					v-for="list in allLists" 
-					:key="list.id"
-					@click="selectList(list)"
-					:class="{
-						'bg-blue-500 text-white': currentList?.id === list.id,
-						'bg-gray-200': currentList?.id !== list.id
-					}"
-					class="px-4 py-2 rounded-md mr-2 whitespace-nowrap"
-				>
-					{{ list.name }}
-				</button>
+				<div v-for="list in allLists" :key="list.id" class="flex items-center">
+					<button 
+						@click="selectList(list)"
+						:class="{
+							'bg-blue-500 text-white': currentList?.id === list.id,
+							'bg-gray-200': currentList?.id !== list.id
+						}"
+						class="px-4 py-2 rounded-md mr-2 whitespace-nowrap flex-grow"
+					>
+						{{ list.name }}
+					</button>
+					<button 
+						v-if="list.name !== 'Default List'"
+						@click="confirmDeleteList(list)"
+						class="bg-red-500 text-white px-2 py-2 rounded-md ml-1"
+					>
+						<font-awesome-icon :icon="['fas', 'trash']" />
+					</button>
+				</div>
 			</div>
 			<button 
 				@click="showListInput = !showListInput" 
@@ -80,7 +87,7 @@
 import { defineComponent, ref, onMounted, computed } from 'vue'
 import Todo from '@/components/Todo.vue'
 import { supabase } from '@/lib/supabase'
-import { allTodos, allLists, fetchTodos, fetchLists, addTodo, addList, currentList } from '@/vuetils/useTodo'
+import { allTodos, allLists, fetchTodos, fetchLists, addTodo, addList, currentList, deleteList } from '@/vuetils/useTodo'
 import { userSession } from '@/vuetils/useAuth'
 
 // Ensure existing todos are migrated to the default list
@@ -188,6 +195,17 @@ export default defineComponent({
 			allTodos.value.filter(todo => todo.list_id === currentList.value?.id)
 		)
 
+		async function confirmDeleteList(list: TodoList) {
+			const confirmDelete = confirm(`Are you sure you want to delete the list "${list.name}"? All todos in this list will be permanently deleted.`)
+			
+			if (confirmDelete) {
+				const success = await deleteList(list)
+				if (success) {
+					await fetchLists()
+				}
+			}
+		}
+
 		return {
 			task,
 			listName,
@@ -199,6 +217,7 @@ export default defineComponent({
 			insertTask,
 			createList,
 			selectList,
+			confirmDeleteList,
 			userSession,
 		}
 	},

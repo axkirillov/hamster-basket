@@ -90,6 +90,51 @@ async function addList(list: TodoList): Promise<null | TodoList> {
 }
 
 /**
+ * Delete a list from supabase
+ */
+async function deleteList(list: TodoList): Promise<boolean> {
+	try {
+		// First, delete all todos associated with this list
+		await supabase.from('todos').delete().eq('list_id', list.id)
+
+		// Then delete the list itself
+		const { error } = await supabase.from('todo_lists').delete().eq('id', list.id)
+
+		if (error) {
+			alert(error.message)
+			console.error('There was an error deleting list', error)
+			return false
+		}
+
+		// Remove the list from allLists
+		allLists.value = allLists.value.filter(l => l.id !== list.id)
+
+		// If the deleted list was the current list, switch to another list or create a default
+		if (currentList.value?.id === list.id) {
+			if (allLists.value.length > 0) {
+				currentList.value = allLists.value[0]
+				await fetchTodos(currentList.value.id)
+			} else {
+				// Create a new default list if no lists remain
+				const defaultList = await addList({ 
+					user_id: userSession.value?.user.id || '', 
+					name: 'Default List' 
+				})
+				
+				if (defaultList) {
+					currentList.value = defaultList
+				}
+			}
+		}
+
+		return true
+	} catch (err) {
+		console.error('Unknown problem deleting list from db', err)
+		return false
+	}
+}
+
+/**
  *  Add a new todo to supabase
  */
 async function addTodo(todo: Todo): Promise<null | Todo> {
@@ -165,5 +210,6 @@ export {
   currentList, 
   allLists, 
   fetchLists, 
-  addList 
+  addList,
+  deleteList
 }
