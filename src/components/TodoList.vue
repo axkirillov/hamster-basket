@@ -29,7 +29,7 @@
 							Create New List
 						</button>
 						<button 
-							@click="selectList(list); sideMenuOpen = false"
+							@click="toggleListSelection"
 							class="text-gray-900 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
 						>
 							<font-awesome-icon 
@@ -132,6 +132,31 @@
 			<button @click="createList" class="btn-black">
 				Create
 			</button>
+		</div>
+
+		<!-- List Selection Overlay -->
+		<div 
+			v-if="showListSelection" 
+			class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+			@click.self="showListSelection = false"
+		>
+			<div class="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+				<h2 class="text-xl font-semibold mb-4">Select a List</h2>
+				<div class="space-y-2">
+					<button 
+						v-for="list in allLists" 
+						:key="list.id"
+						@click="selectList(list); showListSelection = false"
+						:class="{
+							'bg-blue-500 text-white': currentList?.id === list.id,
+							'bg-gray-200 hover:bg-gray-300': currentList?.id !== list.id
+						}"
+						class="w-full text-left px-4 py-2 rounded-md transition duration-200"
+					>
+						{{ list.name }}
+					</button>
+				</div>
+			</div>
 		</div>
 
 		<div class="bg-white shadow overflow-hidden rounded-md py-2">
@@ -289,9 +314,15 @@ export default defineComponent({
 		}
 
 		const sideMenuOpen = ref(false)
+		const showListSelection = ref(false)
 
 		function toggleSideMenu() {
 			sideMenuOpen.value = !sideMenuOpen.value
+		}
+
+		function toggleListSelection() {
+			showListSelection.value = !showListSelection.value
+			sideMenuOpen.value = false
 		}
 
 		// Click outside handler for side menu
@@ -336,6 +367,8 @@ export default defineComponent({
 			sideMenuOpen,
 			toggleSideMenu,
 			deleteCurrentList,
+			showListSelection,
+			toggleListSelection,
 		}
 	},
 })
