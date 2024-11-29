@@ -139,7 +139,12 @@ async function deleteList(list: TodoList): Promise<boolean> {
  */
 async function addTodo(todo: Todo): Promise<null | Todo> {
 	try {
-		const { data, error } = await supabase.from('todos').insert(todo).select().single()
+		// Remove list_id if it's undefined to avoid type errors
+		const todoToInsert = todo.list_id === undefined 
+			? { user_id: todo.user_id, task: todo.task }
+			: todo
+
+		const { data, error } = await supabase.from('todos').insert(todoToInsert).select().single()
 
 		if (error) {
 			alert(error.message)

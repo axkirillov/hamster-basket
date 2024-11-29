@@ -204,7 +204,7 @@ export default defineComponent({
 				const todo = await addTodo({ 
 				  user_id: userSession.value.user.id, 
 				  task: task.value, 
-				  list_id: currentList.value?.id 
+				  list_id: currentList.value?.id ?? undefined 
 				})
 
 				// If there was no response, don't do anything.
