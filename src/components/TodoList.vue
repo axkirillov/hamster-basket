@@ -79,6 +79,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { defineComponent, ref, onMounted } from 'vue'
 import Todo from '@/components/Todo.vue'
+import { supabase } from '@/lib/supabase'
 import { allTodos, allLists, fetchTodos, fetchLists, addTodo, addList, currentList } from '@/vuetils/useTodo'
 import { userSession } from '@/vuetils/useAuth'
 
