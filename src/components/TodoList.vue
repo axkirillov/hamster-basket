@@ -77,7 +77,7 @@
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/camelcase */
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
 import Todo from '@/components/Todo.vue'
 import { supabase } from '@/lib/supabase'
 import { allTodos, allLists, fetchTodos, fetchLists, addTodo, addList, currentList } from '@/vuetils/useTodo'
@@ -184,11 +184,16 @@ export default defineComponent({
 			}
 		}
 
+		const filteredTodos = computed(() => 
+			allTodos.value.filter(todo => todo.list_id === currentList.value?.id)
+		)
+
 		return {
 			task,
 			listName,
 			showListInput,
 			allTodos,
+			filteredTodos,
 			allLists,
 			currentList,
 			insertTask,
