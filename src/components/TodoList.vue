@@ -24,6 +24,13 @@
 			<span>Lists</span>
 			<font-awesome-icon :icon="['fas', 'chevron-right']" class="w-3 h-3" />
 			<span class="font-semibold">{{ currentList?.name }}</span>
+			<button 
+				v-if="currentList && currentList.name !== 'Default List'"
+				@click="deleteCurrentList" 
+				class="ml-2 text-red-500 hover:text-red-700 transition-colors duration-200"
+			>
+				<font-awesome-icon :icon="['fas', 'trash']" class="w-4 h-4" />
+			</button>
 			
 			<!-- Flyout Menu -->
 			<div 
