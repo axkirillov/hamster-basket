@@ -29,14 +29,14 @@
 							Create New List
 						</button>
 						<button 
-							@click="importList(); sideMenuOpen = false"
+							@click="selectList(list); sideMenuOpen = false"
 							class="text-gray-900 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
 						>
 							<font-awesome-icon 
-								:icon="['fas', 'upload']" 
+								:icon="['fas', 'list']" 
 								class="mr-2 h-5 w-5 text-gray-500"
 							/>
-							Import List
+							Select List
 						</button>
 						<button 
 							@click="deleteCurrentList(); sideMenuOpen = false"
@@ -311,11 +311,6 @@ export default defineComponent({
 				document.removeEventListener('click', handleClickOutside)
 			}
 		})
-
-		function importList() {
-			// TODO: Implement list import functionality
-			alert('Import List functionality coming soon!')
-		}
 
 		function deleteCurrentList() {
 			if (currentList.value && currentList.value.name !== 'Default List') {
