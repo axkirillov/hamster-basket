@@ -1,15 +1,56 @@
 <template>
 	<div class="w-full">
-		<div class="flex items-center justify-between mb-4">
-			<button 
-				@click="toggleSideMenu" 
-				class="ml-4 p-2 hover:bg-gray-200 rounded-full transition duration-200"
-			>
-				<font-awesome-icon 
-					:icon="['fas', 'bars']" 
-					class="w-6 h-6 text-gray-600"
-				/>
-			</button>
+		<div class="flex items-center justify-between mb-4 relative">
+			<div class="relative">
+				<button 
+					@click="toggleSideMenu" 
+					class="ml-4 p-2 hover:bg-gray-200 rounded-full transition duration-200"
+				>
+					<font-awesome-icon 
+						:icon="['fas', 'bars']" 
+						class="w-6 h-6 text-gray-600"
+					/>
+				</button>
+				
+				<!-- Flyout Menu -->
+				<div 
+					v-if="sideMenuOpen" 
+					class="absolute left-0 mt-2 w-56 origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+				>
+					<div class="py-1">
+						<button 
+							@click="showListInput = true; sideMenuOpen = false" 
+							class="text-gray-900 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+						>
+							<font-awesome-icon 
+								:icon="['fas', 'plus']" 
+								class="mr-2 h-5 w-5 text-gray-500"
+							/>
+							Create New List
+						</button>
+						<button 
+							@click="importList(); sideMenuOpen = false"
+							class="text-gray-900 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+						>
+							<font-awesome-icon 
+								:icon="['fas', 'upload']" 
+								class="mr-2 h-5 w-5 text-gray-500"
+							/>
+							Import List
+						</button>
+						<button 
+							@click="exportList(); sideMenuOpen = false"
+							class="text-gray-900 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+						>
+							<font-awesome-icon 
+								:icon="['fas', 'download']" 
+								class="mr-2 h-5 w-5 text-gray-500"
+							/>
+							Export List
+						</button>
+					</div>
+				</div>
+			</div>
 			<div class="logos flex-grow flex justify-center">
 				<a href="" class="logo mr-2">
 					<img src="/hamster.svg">
@@ -253,6 +294,34 @@ export default defineComponent({
 			sideMenuOpen.value = !sideMenuOpen.value
 		}
 
+		// Click outside handler for side menu
+		onMounted(() => {
+			const handleClickOutside = (event: MouseEvent) => {
+				const menuButton = event.target as HTMLElement
+				const menu = document.querySelector('.absolute.left-0.mt-2')
+				
+				if (menu && !menu.contains(menuButton) && !menuButton.closest('button')) {
+					sideMenuOpen.value = false
+				}
+			}
+
+			document.addEventListener('click', handleClickOutside)
+
+			return () => {
+				document.removeEventListener('click', handleClickOutside)
+			}
+		})
+
+		function importList() {
+			// TODO: Implement list import functionality
+			alert('Import List functionality coming soon!')
+		}
+
+		function exportList() {
+			// TODO: Implement list export functionality
+			alert('Export List functionality coming soon!')
+		}
+
 		return {
 			task,
 			listName,
@@ -268,6 +337,8 @@ export default defineComponent({
 			userSession,
 			sideMenuOpen,
 			toggleSideMenu,
+			importList,
+			exportList,
 		}
 	},
 })
