@@ -25,9 +25,24 @@
 					<button 
 						v-if="list.name !== 'Default List'"
 						@click="confirmDeleteList(list)"
-						class="bg-red-500 text-white px-2 py-2 rounded-md ml-1"
+						class="
+							text-red-600 
+							hover:bg-red-100 
+							p-2 
+							rounded-full 
+							transition 
+							duration-200 
+							ease-in-out 
+							focus:outline-none 
+							focus:ring-2 
+							focus:ring-red-300
+						"
+						title="Delete List"
 					>
-						<font-awesome-icon :icon="['fas', 'trash']" />
+						<font-awesome-icon 
+							:icon="['fas', 'trash']" 
+							class="w-5 h-5"
+						/>
 					</button>
 				</div>
 			</div>
