@@ -61,29 +61,53 @@
 			</div>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
-		<div class="border-b border-gray-200 mb-4 max-w-full overflow-x-auto">
-			<nav class="-mb-px flex space-x-2 w-max" aria-label="Tabs">
-				<button 
-					v-for="list in allLists" 
-					:key="list.id"
-					@click="selectList(list)"
-					:class="{
-						'border-blue-500 text-blue-600': currentList?.id === list.id,
-						'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': currentList?.id !== list.id
-					}"
-					class="
-						whitespace-nowrap 
-						border-b-2 
-						px-4 
-						py-2 
-						text-sm 
-						font-medium
-						flex-shrink-0
-					"
+		<div class="border-b border-gray-200 mb-4 max-w-full flex items-center">
+			<button 
+				@click="scrollTabs('left')" 
+				class="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+				:disabled="tabScrollPosition === 0"
+			>
+				<font-awesome-icon :icon="['fas', 'chevron-left']" />
+			</button>
+			<div 
+				ref="tabContainer" 
+				class="overflow-x-auto w-full scroll-smooth"
+				:style="{ scrollBehavior: 'smooth' }"
+			>
+				<nav 
+					class="-mb-px flex space-x-2 w-max" 
+					aria-label="Tabs"
+					:style="{ transform: `translateX(-${tabScrollPosition}px)` }"
 				>
-					{{ list.name }}
-				</button>
-			</nav>
+					<button 
+						v-for="list in allLists" 
+						:key="list.id"
+						@click="selectList(list)"
+						:class="{
+							'border-blue-500 text-blue-600': currentList?.id === list.id,
+							'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': currentList?.id !== list.id
+						}"
+						class="
+							whitespace-nowrap 
+							border-b-2 
+							px-4 
+							py-2 
+							text-sm 
+							font-medium
+							flex-shrink-0
+						"
+					>
+						{{ list.name }}
+					</button>
+				</nav>
+			</div>
+			<button 
+				@click="scrollTabs('right')" 
+				class="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+				:disabled="isMaxScrollReached"
+			>
+				<font-awesome-icon :icon="['fas', 'chevron-right']" />
+			</button>
 		</div>
 
 
@@ -266,6 +290,24 @@ export default defineComponent({
 
 		const sideMenuOpen = ref(false)
 		const showListSelection = ref(false)
+		const tabContainer = ref<HTMLDivElement | null>(null)
+		const tabScrollPosition = ref(0)
+		const isMaxScrollReached = computed(() => {
+			if (!tabContainer.value) return true
+			return tabScrollPosition.value >= tabContainer.value.scrollWidth - tabContainer.value.clientWidth
+		})
+
+		function scrollTabs(direction: 'left' | 'right') {
+			if (!tabContainer.value) return
+
+			const scrollAmount = tabContainer.value.clientWidth / 2
+			tabScrollPosition.value = direction === 'left' 
+				? Math.max(0, tabScrollPosition.value - scrollAmount)
+				: Math.min(
+					tabContainer.value.scrollWidth - tabContainer.value.clientWidth, 
+					tabScrollPosition.value + scrollAmount
+				)
+		}
 
 		function toggleSideMenu() {
 			sideMenuOpen.value = !sideMenuOpen.value
@@ -328,6 +370,10 @@ export default defineComponent({
 			deleteCurrentList,
 			showListSelection,
 			toggleListSelection,
+			tabContainer,
+			tabScrollPosition,
+			scrollTabs,
+			isMaxScrollReached,
 		}
 	},
 })
