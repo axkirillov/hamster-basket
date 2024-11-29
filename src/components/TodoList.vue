@@ -11,38 +11,53 @@
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
 		<div class="flex space-x-2 mb-4">
 			<div class="flex overflow-x-auto">
-				<div v-for="list in allLists" :key="list.id" class="flex items-center">
+				<div v-for="list in allLists" :key="list.id" class="group relative flex items-center">
 					<button 
 						@click="selectList(list)"
 						:class="{
 							'bg-blue-500 text-white': currentList?.id === list.id,
 							'bg-gray-200': currentList?.id !== list.id
 						}"
-						class="px-4 py-2 rounded-md mr-2 whitespace-nowrap flex-grow"
+						class="
+							px-4 
+							py-2 
+							rounded-md 
+							mr-2 
+							whitespace-nowrap 
+							flex-grow 
+							pr-10 
+							relative
+						"
 					>
 						{{ list.name }}
-					</button>
-					<button 
-						v-if="list.name !== 'Default List'"
-						@click="confirmDeleteList(list)"
-						class="
-							text-red-600 
-							hover:bg-red-100 
-							p-2 
-							rounded-full 
-							transition 
-							duration-200 
-							ease-in-out 
-							focus:outline-none 
-							focus:ring-2 
-							focus:ring-red-300
-						"
-						title="Delete List"
-					>
-						<font-awesome-icon 
-							:icon="['fas', 'trash']" 
-							class="w-5 h-5"
-						/>
+						<button 
+							v-if="list.name !== 'Default List'"
+							@click.stop="confirmDeleteList(list)"
+							class="
+								absolute 
+								right-1 
+								top-1/2 
+								-translate-y-1/2 
+								text-red-600 
+								hover:bg-red-100 
+								p-1 
+								rounded-full 
+								transition 
+								duration-200 
+								ease-in-out 
+								opacity-0 
+								group-hover:opacity-100 
+								focus:outline-none 
+								focus:ring-2 
+								focus:ring-red-300
+							"
+							title="Delete List"
+						>
+							<font-awesome-icon 
+								:icon="['fas', 'trash']" 
+								class="w-4 h-4"
+							/>
+						</button>
 					</button>
 				</div>
 			</div>
