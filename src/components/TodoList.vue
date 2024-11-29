@@ -146,7 +146,7 @@ export default defineComponent({
 
 		onMounted(async () => {
 			await fetchLists()
-			if (currentList.value) {
+			if (currentList.value && currentList.value.id) {
 				await fetchTodos(currentList.value.id)
 				
 				// Migrate existing todos to the default list if needed
