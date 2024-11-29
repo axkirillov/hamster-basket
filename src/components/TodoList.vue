@@ -4,11 +4,11 @@
 			<div class="relative">
 				<button 
 					@click="toggleSideMenu" 
-					class="ml-4 p-2 hover:bg-gray-200 rounded-full transition duration-200"
+					class="ml-4 p-3 hover:bg-gray-200 rounded-full transition duration-200"
 				>
 					<font-awesome-icon 
 						:icon="['fas', 'bars']" 
-						class="w-6 h-6 text-gray-600"
+						class="w-8 h-8 text-gray-600"
 					/>
 				</button>
 				
@@ -39,14 +39,14 @@
 							Import List
 						</button>
 						<button 
-							@click="exportList(); sideMenuOpen = false"
-							class="text-gray-900 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+							@click="deleteCurrentList(); sideMenuOpen = false"
+							class="text-red-600 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
 						>
 							<font-awesome-icon 
-								:icon="['fas', 'download']" 
-								class="mr-2 h-5 w-5 text-gray-500"
+								:icon="['fas', 'trash']" 
+								class="mr-2 h-5 w-5 text-red-500"
 							/>
-							Export List
+							Delete Current List
 						</button>
 					</div>
 				</div>
@@ -317,9 +317,12 @@ export default defineComponent({
 			alert('Import List functionality coming soon!')
 		}
 
-		function exportList() {
-			// TODO: Implement list export functionality
-			alert('Export List functionality coming soon!')
+		function deleteCurrentList() {
+			if (currentList.value && currentList.value.name !== 'Default List') {
+				confirmDeleteList(currentList.value)
+			} else {
+				alert('Cannot delete the default list')
+			}
 		}
 
 		return {
@@ -337,8 +340,7 @@ export default defineComponent({
 			userSession,
 			sideMenuOpen,
 			toggleSideMenu,
-			importList,
-			exportList,
+			deleteCurrentList,
 		}
 	},
 })
