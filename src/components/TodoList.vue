@@ -25,7 +25,6 @@
 							mr-2 
 							whitespace-nowrap 
 							flex-grow 
-							pr-10 
 							relative
 						"
 					>
