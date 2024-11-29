@@ -61,8 +61,8 @@
 			</div>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
-		<div class="border-b border-gray-200 mb-4">
-			<nav class="-mb-px flex space-x-2 overflow-x-auto" aria-label="Tabs">
+		<div class="border-b border-gray-200 mb-4 max-w-full overflow-x-auto">
+			<nav class="-mb-px flex space-x-2 w-max" aria-label="Tabs">
 				<button 
 					v-for="list in allLists" 
 					:key="list.id"
