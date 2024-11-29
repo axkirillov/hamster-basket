@@ -19,7 +19,7 @@
 				>
 					<div class="py-1">
 						<button 
-							@click="showListInput = true; sideMenuOpen = false" 
+							@click="createListPrompt(); sideMenuOpen = false" 
 							class="text-gray-900 group flex rounded-md items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
 						>
 							<font-awesome-icon 
@@ -331,6 +331,14 @@ export default defineComponent({
 			}
 		}
 
+		function createListPrompt() {
+			const newListName = prompt('Enter a name for the new list:')
+			if (newListName) {
+				listName.value = newListName
+				createList()
+			}
+		}
+
 		return {
 			task,
 			listName,
@@ -340,6 +348,7 @@ export default defineComponent({
 			currentList,
 			insertTask,
 			createList,
+			createListPrompt,
 			selectList,
 			confirmDeleteList,
 			userSession,
