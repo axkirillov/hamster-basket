@@ -82,6 +82,19 @@ import Todo from '@/components/Todo.vue'
 import { allTodos, allLists, fetchTodos, fetchLists, addTodo, addList, currentList } from '@/vuetils/useTodo'
 import { userSession } from '@/vuetils/useAuth'
 
+// Ensure existing todos are migrated to the default list
+async function migrateExistingTodos(defaultListId: number) {
+  const existingTodos = await supabase.from('todos').select('*').is('list_id', null)
+  
+  if (existingTodos.data && existingTodos.data.length > 0) {
+    const updatePromises = existingTodos.data.map(todo => 
+      supabase.from('todos').update({ list_id: defaultListId }).eq('id', todo.id)
+    )
+    
+    await Promise.all(updatePromises)
+  }
+}
+
 export default defineComponent({
 	name: 'TodoList',
 	components: {
@@ -95,9 +108,14 @@ export default defineComponent({
 
 		onMounted(async () => {
 			await fetchLists()
-			if (allLists.value.length > 0) {
-				currentList.value = allLists.value[0]
+			if (currentList.value) {
 				await fetchTodos(currentList.value.id)
+				
+				// Migrate existing todos to the default list if needed
+				if (currentList.value.name === 'Default List') {
+					await migrateExistingTodos(currentList.value.id)
+					await fetchTodos(currentList.value.id)
+				}
 			}
 		})
 

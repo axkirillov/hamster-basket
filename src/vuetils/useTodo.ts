@@ -18,12 +18,22 @@ async function fetchLists() {
 			return
 		}
 		// handle for when no lists are returned
-		if (lists === null) {
-			allLists.value = []
-			return
+		if (lists === null || lists.length === 0) {
+			// Create a default list if no lists exist
+			const defaultList = await addList({ 
+				user_id: userSession.value?.user.id || '', 
+				name: 'Default List' 
+			})
+			
+			if (defaultList) {
+				allLists.value = [defaultList]
+				currentList.value = defaultList
+				return
+			}
 		}
 		// store response to allLists
 		allLists.value = lists
+		currentList.value = lists[0]
 		console.log('got lists!', allLists.value)
 	} catch (err) {
 		console.error('Error retrieving lists from db', err)
