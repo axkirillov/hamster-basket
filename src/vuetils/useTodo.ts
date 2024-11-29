@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { supabase } from '@/lib/supabase'
 import { ref } from 'vue'
+import { userSession } from '@/vuetils/useAuth'
 
 const allTodos = ref<Todo[]>([])
 const allLists = ref<TodoList[]>([])
