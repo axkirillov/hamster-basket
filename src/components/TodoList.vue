@@ -17,9 +17,13 @@
 		<div class="flex gap-2 my-4">
 			<input
 				v-model="task"
-				class="rounded w-full p-2"
+				class="
+					rounded 
+					w-full 
+					p-2
+				"
 				type="text"
-				placeholder="What do you need to?"
+				placeholder="What do you need to do?"
 				@keyup.enter="insertTask"
 			/>
 			<button @click="insertTask" class="btn-black">
