@@ -73,13 +73,16 @@
 		<!-- Label picker popover -->
 		<div
 			v-if="showLabelPicker"
+			ref="labelPickerRef"
+			@click.stop
+			@contextmenu.stop
 			class="absolute right-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 py-1"
 		>
 			<div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
 				Assign Labels
 			</div>
 			<div v-if="allLabels.length === 0" class="px-3 py-2 text-sm text-gray-400">
-				No labels yet. Create one in the Lists menu.
+				No labels yet. Create one in the Labels menu.
 			</div>
 			<button
 				v-for="label in allLabels"
@@ -122,8 +125,10 @@ export default defineComponent({
 	},
 	setup(props) {
 		const showLabelPicker = ref(false)
+		const labelPickerRef = ref<HTMLElement | null>(null)
 		let longPressTimer: ReturnType<typeof setTimeout> | null = null
 		let touchMoved = false
+		let openedAt = 0
 
 		onMounted(async () => {
 			if (allLabels.value.length === 0) {
@@ -160,21 +165,28 @@ export default defineComponent({
 			}
 		}
 
-		function openLabelPicker() {
-			showLabelPicker.value = !showLabelPicker.value
-			// Close picker when clicking outside
-			if (showLabelPicker.value) {
-				setTimeout(() => {
-					const closeHandler = (e: MouseEvent) => {
-						const picker = document.querySelector('.absolute.right-0.top-full')
-						if (picker && !picker.contains(e.target as Node)) {
-							showLabelPicker.value = false
-							document.removeEventListener('click', closeHandler)
-						}
-					}
-					document.addEventListener('click', closeHandler)
-				}, 0)
+		function closeLabelPicker() {
+			showLabelPicker.value = false
+			document.removeEventListener('pointerdown', outsidePointerHandler)
+		}
+
+		function outsidePointerHandler(e: PointerEvent) {
+			// Ignore events within 300ms of opening (browser may synthesize clicks after contextmenu/touchend)
+			if (Date.now() - openedAt < 300) return
+			if (labelPickerRef.value && !labelPickerRef.value.contains(e.target as Node)) {
+				closeLabelPicker()
 			}
+		}
+
+		function openLabelPicker() {
+			if (showLabelPicker.value) {
+				closeLabelPicker()
+				return
+			}
+			showLabelPicker.value = true
+			openedAt = Date.now()
+			// Use pointerdown for outside-click detection (avoids synthetic click events after right-click/touchend)
+			document.addEventListener('pointerdown', outsidePointerHandler)
 		}
 
 		async function toggleLabel(label: Label) {
@@ -196,7 +208,9 @@ export default defineComponent({
 			updateTaskCompletion,
 			clearTodo,
 			showLabelPicker,
+			labelPickerRef,
 			openLabelPicker,
+			closeLabelPicker,
 			onTouchStart,
 			onTouchEnd,
 			onTouchMove,
