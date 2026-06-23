@@ -146,8 +146,10 @@ export default defineComponent({
 
 		// Long press for touch devices
 		function onTouchStart() {
+			console.log('touchstart')
 			touchMoved = false
 			longPressTimer = setTimeout(() => {
+				console.log('longPressTimer fired, touchMoved:', touchMoved)
 				if (!touchMoved) {
 					openLabelPicker()
 				}
@@ -179,6 +181,7 @@ export default defineComponent({
 		}
 
 		function openLabelPicker() {
+			console.log('openLabelPicker called, showLabelPicker was:', showLabelPicker.value, 'allLabels:', allLabels.value.length)
 			if (showLabelPicker.value) {
 				closeLabelPicker()
 				return
