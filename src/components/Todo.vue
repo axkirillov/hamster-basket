@@ -20,13 +20,12 @@
 			@contextmenu.prevent="openLabelPicker"
 		>
 			<Checkbox :checked="todo['is_complete'] ?? false" @click="updateTaskCompletion(todo, !todo['is_complete'])" />
-			<div class="min-w-0 flex-1 flex flex-wrap items-center gap-x-2 py-2">
-				<span class="text-sm leading-5 font-medium whitespace-pre-wrap break-words">{{ todo.task }}</span>
-				<span
+			<div class="min-w-0 flex-1 py-2">
+				<span class="text-sm leading-5 font-medium whitespace-pre-wrap break-words">{{ todo.task }}</span><span
 					v-for="label in assignedLabels"
 					:key="label.id"
 					:style="{ backgroundColor: label.color || '#3B82F6' }"
-					class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
+					class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white ml-1 align-middle"
 				>
 					{{ label.name }}
 				</span>
