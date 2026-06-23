@@ -15,9 +15,6 @@
 		<div
 			class="flex items-center px-0 py-0 sm:px-4"
 			@contextmenu.prevent="openLabelPicker"
-			@touchstart="onTouchStart"
-			@touchend="onTouchEnd"
-			@touchmove="onTouchMove"
 		>
 			<Checkbox :checked="todo['is_complete'] ?? false" @click="updateTaskCompletion(todo, !todo['is_complete'])" />
 			<div class="min-w-0 flex-1 flex flex-wrap items-center gap-x-2 py-2">
@@ -123,8 +120,6 @@ export default defineComponent({
 	setup(props) {
 		const showLabelPicker = ref(false)
 		const labelPickerRef = ref<HTMLElement | null>(null)
-		let longPressTimer: ReturnType<typeof setTimeout> | null = null
-		let touchMoved = false
 		let openedAt = 0
 
 		onMounted(async () => {
@@ -139,27 +134,6 @@ export default defineComponent({
 			deleteTodo(props.todo).then(() => {
 				allTodos.value = allTodos.value.filter(todo => todo.id != props.todo.id)
 			})
-		}
-
-		// Long press for touch devices
-		function onTouchStart() {
-			touchMoved = false
-			longPressTimer = setTimeout(() => {
-				if (!touchMoved) {
-					openLabelPicker()
-				}
-			}, 600)
-		}
-
-		function onTouchMove() {
-			touchMoved = true
-		}
-
-		function onTouchEnd() {
-			if (longPressTimer) {
-				clearTimeout(longPressTimer)
-				longPressTimer = null
-			}
 		}
 
 		function closeLabelPicker() {
@@ -208,9 +182,6 @@ export default defineComponent({
 			labelPickerRef,
 			openLabelPicker,
 			closeLabelPicker,
-			onTouchStart,
-			onTouchEnd,
-			onTouchMove,
 			toggleLabel,
 			allLabels,
 			hasLabel,
