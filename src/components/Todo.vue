@@ -11,7 +11,10 @@
 			duration-150 
 			ease-in-out
 			relative
-		">
+			select-none
+		"
+		@selectstart.prevent
+	>
 		<div
 			class="flex items-center px-0 py-0 sm:px-4"
 			@contextmenu.prevent="openLabelPicker"
