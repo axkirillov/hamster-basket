@@ -20,19 +20,16 @@
 			@touchmove="onTouchMove"
 		>
 			<Checkbox :checked="todo['is_complete'] ?? false" @click="updateTaskCompletion(todo, !todo['is_complete'])" />
-			<div class="min-w-0 flex-1 flex flex-col items-start py-2">
-				<div class="text-sm leading-5 font-medium whitespace-pre-wrap break-words w-full">{{ todo.task }}</div>
-				<!-- Label badges -->
-				<div v-if="assignedLabels.length > 0" class="flex flex-wrap gap-1 mt-1">
-					<span
-						v-for="label in assignedLabels"
-						:key="label.id"
-						:style="{ backgroundColor: label.color || '#3B82F6' }"
-						class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
-					>
-						{{ label.name }}
-					</span>
-				</div>
+			<div class="min-w-0 flex-1 flex flex-wrap items-center gap-x-2 py-2">
+				<span class="text-sm leading-5 font-medium whitespace-pre-wrap break-words">{{ todo.task }}</span>
+				<span
+					v-for="label in assignedLabels"
+					:key="label.id"
+					:style="{ backgroundColor: label.color || '#3B82F6' }"
+					class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white"
+				>
+					{{ label.name }}
+				</span>
 			</div>
 			<button
 				class="
