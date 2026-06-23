@@ -19,3 +19,16 @@ declare interface TodoList {
   name: string
   created_at?: string
 }
+
+declare interface Label {
+  id?: number
+  user_id: string
+  name: string
+  color?: string
+  created_at?: string
+}
+
+declare interface TodoLabel {
+  todo_id: number
+  label_id: number
+}

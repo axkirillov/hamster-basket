@@ -9,8 +9,82 @@
 					<img src="/basket.png">
 				</a>
 			</div>
+			<!-- Labels menu button -->
+			<button
+				@click="toggleLabelMenu"
+				class="flex-shrink-0 hover:bg-gray-100 rounded-md px-2 py-1 transition duration-200"
+				title="Manage Labels"
+			>
+				<font-awesome-icon :icon="['fas', 'tags']" class="w-4 h-4 text-gray-600" />
+			</button>
 		</div>
 		<h1 class="m-2 font-semibold text-2xl text-center whitespace-pre-wrap break-all w-full overflow-wrap-anywhere">Hamster's Basket 2.0</h1>
+
+		<!-- Label Menu Overlay -->
+		<div
+			v-if="showLabelMenu"
+			class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+			@click.self="showLabelMenu = false"
+		>
+			<div class="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+				<h2 class="text-xl font-semibold mb-4">Manage Labels</h2>
+
+				<!-- Create new label -->
+				<div class="flex gap-2 mb-4">
+					<input
+						v-model="newLabelName"
+						class="rounded w-full p-2 border border-gray-300"
+						type="text"
+						placeholder="New label name..."
+						@keyup.enter="createLabel"
+					/>
+					<input
+						v-model="newLabelColor"
+						type="color"
+						class="w-10 h-10 rounded border border-gray-300 cursor-pointer"
+						title="Label color"
+					/>
+					<button @click="createLabel" class="btn-black px-3 py-2 rounded">
+						Add
+					</button>
+				</div>
+
+				<!-- Existing labels -->
+				<div v-if="allLabels.length > 0" class="space-y-2">
+					<div
+						v-for="label in allLabels"
+						:key="label.id"
+						class="flex items-center justify-between p-2 bg-gray-50 rounded-md"
+					>
+						<div class="flex items-center gap-2">
+							<span
+								:style="{ backgroundColor: label.color || '#3B82F6' }"
+								class="w-4 h-4 rounded-full"
+							></span>
+							<span class="text-sm font-medium">{{ label.name }}</span>
+						</div>
+						<button
+							@click="removeLabel(label)"
+							class="text-red-500 hover:text-red-700 p-1"
+							title="Delete label"
+						>
+							<font-awesome-icon :icon="['fas', 'trash']" class="w-4 h-4" />
+						</button>
+					</div>
+				</div>
+				<p v-else class="text-sm text-gray-400 text-center py-4">
+					No labels created yet. Add one above.
+				</p>
+
+				<button
+					@click="showLabelMenu = false"
+					class="mt-4 w-full py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-sm font-medium transition duration-200"
+				>
+					Close
+				</button>
+			</div>
+		</div>
+
 		<nav v-if="allLists.length > 0" class="flex items-center justify-center space-x-2 text-sm text-gray-600 mb-2">
 			<div class="relative">
 				<button 
@@ -209,6 +283,7 @@ import { defineComponent, ref, onMounted, computed } from 'vue'
 import Todo from '@/components/Todo.vue'
 import { supabase } from '@/lib/supabase'
 import { allTodos, allLists, fetchTodos, fetchLists, addTodo, addList, currentList, deleteList } from '@/vuetils/useTodo'
+import { allLabels, fetchLabels, fetchTodoLabels, addLabel, deleteLabel } from '@/vuetils/useLabels'
 import { userSession } from '@/vuetils/useAuth'
 
 // Ensure existing todos are migrated to the default list
@@ -245,6 +320,8 @@ export default defineComponent({
 					await fetchTodos(currentList.value.id)
 				}
 			}
+			await fetchLabels()
+			await fetchTodoLabels()
 		})
 
 		async function createList() {
@@ -414,6 +491,39 @@ export default defineComponent({
 			}
 		}
 
+		// --- Label management ---
+		const showLabelMenu = ref(false)
+		const newLabelName = ref('')
+		const newLabelColor = ref('#3B82F6')
+
+		function toggleLabelMenu() {
+			showLabelMenu.value = !showLabelMenu.value
+		}
+
+		async function createLabel() {
+			if (!newLabelName.value.trim()) {
+				alert('Please enter a label name')
+				return
+			}
+			if (!userSession?.value) {
+				alert('Please log in again')
+				return
+			}
+			await addLabel({
+				user_id: userSession.value.user.id,
+				name: newLabelName.value.trim(),
+				color: newLabelColor.value,
+			})
+			newLabelName.value = ''
+			newLabelColor.value = '#3B82F6'
+		}
+
+		async function removeLabel(label: Label) {
+			if (confirm(`Delete label "${label.name}"? It will be removed from all todos.`)) {
+				await deleteLabel(label)
+			}
+		}
+
 		function createListPrompt() {
 			const newListName = prompt('Enter a name for the new list:')
 			if (newListName) {
@@ -448,6 +558,14 @@ export default defineComponent({
 			visibleLists,
 			listDropdownOpen,
 			toggleListDropdown,
+			// Labels
+			showLabelMenu,
+			toggleLabelMenu,
+			newLabelName,
+			newLabelColor,
+			createLabel,
+			removeLabel,
+			allLabels,
 		}
 	},
 })
