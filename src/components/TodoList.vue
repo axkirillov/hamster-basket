@@ -247,7 +247,7 @@
 			</div>
 		</div>
 
-		<div class="bg-white shadow overflow-hidden rounded-md py-2">
+		<div class="bg-white shadow overflow-visible rounded-md py-2">
 			<ul v-if="currentList">
 				<Todo v-for="(todo, index) in filteredTodos" :key="index" :todo="todo" />
 			</ul>
